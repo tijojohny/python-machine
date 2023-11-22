@@ -1,0 +1,158 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ chart_data.chart_title }}</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>{{ chart_data.chart_title }}</h1>
+    <p>X-axis: {{ chart_data.x_label }}, Y-axis: {{ chart_data.y_label }}</p>
+    
+    <div id="scatter-plot"></div>
+
+    <h2>Cluster Centers</h2>
+    <p>{{ chart_data.centers }}</p>
+
+    <h2>Cluster Counts</h2>
+    <p>{{ chart_data.counts }}</p>
+
+    <script>
+        // Convert string representation of lists to JavaScript arrays
+        var centers = JSON.parse("{{ chart_data.centers | tojson | safe }}");
+        var labels = JSON.parse("{{ chart_data.labels | tojson | safe }}");
+
+        // Plotly scatter plot
+        var trace1 = {
+            x: centers.map(function(x) { return x[0]; }),
+            y: centers.map(function(x) { return x[1]; }),
+            mode: 'markers',
+            type: 'scatter',
+            marker: {
+                size: 10,
+                color: 'red'
+            },
+            name: 'Cluster Centers'
+        };
+
+        var trace2 = {
+            x: labels.map(function(x) { return x[0]; }),
+            y: labels.map(function(x) { return x[1]; }),
+            mode: 'markers',
+            type: 'scatter',
+            marker: {
+                size: 6,
+                color: labels
+            },
+            name: 'Data Points'
+        };
+
+        var layout = {
+            xaxis: {
+                title: '{{ chart_data.x_label }}'
+            },
+            yaxis: {
+                title: '{{ chart_data.y_label }}'
+            }
+        };
+
+        var data = [trace1, trace2];
+
+        Plotly.newPlot('scatter-plot', data, layout);
+    </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ chart_data.chart_title }}</title>
+    <!-- <title>K-Means Clustering</title> -->
+</head>
+<body >
+    <!-- <h1>{{ chart_data.chart_title }}</h1>
+    <p>X-axis: {{ chart_data.x_label }}, Y-axis: {{ chart_data.y_label }}</p>
+    
+    <div id="scatter-plot"></div>
+
+    <h2>Cluster Centers</h2>
+    <p>{{ chart_data.centers }}</p>
+
+    <h2>Cluster Counts</h2>
+    <p>{{ chart_data.counts }}</p> -->
+
+    <!-- <hr> -->
+<div  >
+    <h1>K-Means Clustering</h1>
+    <input type="text" id="inputValueBala" placeholder="Enter a balance value"><br/><br/>
+    <input type="text" id="inputValuePurch" placeholder="Enter a purchase value"><br/><br/>
+
+    <button onclick="printValue()">Submit</button>
+    <button onclick="clearFields()">Clear</button>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        // Your existing JavaScript code here
+
+        // Function to print the entered value
+        function printValue() {
+              // Get input values
+        var balanceValue = $("#inputValueBala").val();
+        var purchaseValue = $("#inputValuePurch").val();
+
+        // Make an AJAX request to the Flask server
+        $.ajax({
+            type: "POST",
+            url: "/submit_data",
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify({ balance: balanceValue, purchase: purchaseValue }),
+            success: function(response) {
+                // Handle the response from the server
+                console.log("response",response);
+
+                // Display the response data (customize this part according to your needs)
+                if (response.length > 0) {
+                    alert("Filtered Data:\n" + JSON.stringify(response, null, 2));
+                } else {
+                    alert("No data found for the given balance and purchase values.");
+                }
+            },
+            error: function(error) {
+                console.log("error",error);
+            }
+        });
+        }
+        function clearFields() {
+            document.getElementById("inputValueBala").value = "";
+            document.getElementById("inputValuePurch").value = "";
+            console.log("Clear button clicked!");
+        }
+    </script>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ff0000a8;
+        }
+    
+        div {
+            text-align: center;
+            background-color: #ffffff; 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1{ 
+            color: black;
+        }
+    </style>
+</body>
+</html>
